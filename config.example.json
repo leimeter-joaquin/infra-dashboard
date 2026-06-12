@@ -1,0 +1,64 @@
+{
+  "environments": [
+    {
+      "id": "env-local",
+      "name": "local",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "env-preview",
+      "name": "preview",
+      "createdAt": "2024-01-01T00:00:00.000Z"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "node-local-api",
+      "environmentId": "env-local",
+      "name": "API",
+      "description": "Cloudflare Worker - local dev",
+      "url": "http://localhost:8787",
+      "position": { "x": 100, "y": 150 }
+    },
+    {
+      "id": "node-local-fe",
+      "environmentId": "env-local",
+      "name": "Frontend",
+      "description": "Vite dev server",
+      "url": "http://localhost:5173",
+      "position": { "x": 450, "y": 150 }
+    },
+    {
+      "id": "node-local-db",
+      "environmentId": "env-local",
+      "name": "D1 Database",
+      "description": "Cloudflare D1 - local binding via wrangler",
+      "url": "http://localhost:8787/__db",
+      "position": { "x": 275, "y": 350 }
+    },
+    {
+      "id": "node-preview-api",
+      "environmentId": "env-preview",
+      "name": "API",
+      "description": "Cloudflare Worker - preview deployment",
+      "url": "https://api.your-project.workers.dev",
+      "position": { "x": 100, "y": 150 }
+    },
+    {
+      "id": "node-preview-fe",
+      "environmentId": "env-preview",
+      "name": "Frontend",
+      "description": "Cloudflare Pages - preview deployment",
+      "url": "https://your-branch.your-project.pages.dev",
+      "position": { "x": 450, "y": 150 }
+    }
+  ],
+  "connections": [
+    {
+      "id": "conn-local-fe-api",
+      "environmentId": "env-local",
+      "source": "node-local-fe",
+      "target": "node-local-api"
+    }
+  ]
+}

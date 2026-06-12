@@ -1,0 +1,27 @@
+{
+  "name": "infra-dashboard",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "concurrently -n server,agent,web -c cyan,yellow,green \"pnpm --filter @infra-dashboard/server dev\" \"pnpm --filter @infra-dashboard/agent dev\" \"pnpm --filter @infra-dashboard/web dev\"",
+    "build": "pnpm --filter @infra-dashboard/shared build && pnpm --filter @infra-dashboard/server build && pnpm --filter @infra-dashboard/agent build && pnpm --filter @infra-dashboard/web build",
+    "test": "vitest run --workspace vitest.workspace.ts",
+    "test:watch": "vitest --workspace vitest.workspace.ts",
+    "test:e2e": "playwright test",
+    "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "typecheck": "pnpm --filter './packages/*' typecheck",
+    "format": "prettier --write \"packages/*/src/**/*.{ts,tsx}\""
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "prettier": "^3.2.5",
+    "typescript": "^5.4.5",
+    "vitest": "^1.6.0"
+  }
+}

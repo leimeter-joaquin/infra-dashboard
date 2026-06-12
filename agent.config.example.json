@@ -1,0 +1,19 @@
+{
+  "_comment": "Copy this file to agent.config.json and replace REPLACE_ME_WITH_A_STRONG_SECRET with a real secret. Never commit agent.config.json.",
+  "token": "REPLACE_ME_WITH_A_STRONG_SECRET",
+  "allowedOrigins": ["http://localhost:3000"],
+  "actions": [
+    {
+      "id": "open-editor",
+      "description": "Open project in VS Code",
+      "cmd": "code",
+      "args": ["/c/workspace/your-project"]
+    },
+    {
+      "id": "restart-wrangler",
+      "description": "Kill running wrangler process (restart manually after)",
+      "cmd": "pkill",
+      "args": ["-f", "wrangler"]
+    }
+  ]
+}
