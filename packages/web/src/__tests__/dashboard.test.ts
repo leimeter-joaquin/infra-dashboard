@@ -4,23 +4,37 @@ import { useDashboardStore } from '../store/dashboard';
 vi.mock('../api/server-client', () => ({
   serverClient: {
     getConfig: vi.fn().mockResolvedValue({ environments: [], nodes: [], connections: [] }),
-    createEnvironment: vi.fn().mockImplementation((name: string) =>
-      Promise.resolve({ id: 'env-new', name, createdAt: new Date().toISOString() })
-    ),
-    updateEnvironment: vi.fn().mockImplementation((id: string, name: string) =>
-      Promise.resolve({ id, name, createdAt: '' })
-    ),
+    createEnvironment: vi
+      .fn()
+      .mockImplementation((name: string) =>
+        Promise.resolve({ id: 'env-new', name, createdAt: new Date().toISOString() })
+      ),
+    updateEnvironment: vi
+      .fn()
+      .mockImplementation((id: string, name: string) =>
+        Promise.resolve({ id, name, createdAt: '' })
+      ),
     deleteEnvironment: vi.fn().mockResolvedValue({ ok: true }),
-    createNode: vi.fn().mockImplementation((data: object) =>
-      Promise.resolve({ id: 'node-new', ...data })
-    ),
-    updateNode: vi.fn().mockImplementation((id: string, data: object) =>
-      Promise.resolve({ id, environmentId: 'env-1', name: 'n', description: '', url: 'http://x.com', position: { x: 0, y: 0 }, ...data })
-    ),
+    createNode: vi
+      .fn()
+      .mockImplementation((data: object) => Promise.resolve({ id: 'node-new', ...data })),
+    updateNode: vi
+      .fn()
+      .mockImplementation((id: string, data: object) =>
+        Promise.resolve({
+          id,
+          environmentId: 'env-1',
+          name: 'n',
+          description: '',
+          url: 'http://x.com',
+          position: { x: 0, y: 0 },
+          ...data,
+        })
+      ),
     deleteNode: vi.fn().mockResolvedValue({ ok: true }),
-    createConnection: vi.fn().mockImplementation((data: object) =>
-      Promise.resolve({ id: 'conn-new', ...data })
-    ),
+    createConnection: vi
+      .fn()
+      .mockImplementation((data: object) => Promise.resolve({ id: 'conn-new', ...data })),
     deleteConnection: vi.fn().mockResolvedValue({ ok: true }),
     checkHealth: vi.fn().mockResolvedValue({ up: true, status: 200, ms: 42 }),
   },
@@ -35,6 +49,7 @@ function resetStore() {
     selectedEnvironmentId: null,
     agentToken: '',
     agentOnline: false,
+    agentActions: [],
   });
 }
 
@@ -62,7 +77,16 @@ describe('dashboard store', () => {
   it('deleteEnvironment removes environment and its nodes/connections', async () => {
     useDashboardStore.setState({
       environments: [{ id: 'env-1', name: 'test', createdAt: '' }],
-      nodes: [{ id: 'n-1', environmentId: 'env-1', name: 'API', description: '', url: 'http://x.com', position: { x: 0, y: 0 } }],
+      nodes: [
+        {
+          id: 'n-1',
+          environmentId: 'env-1',
+          name: 'API',
+          description: '',
+          url: 'http://x.com',
+          position: { x: 0, y: 0 },
+        },
+      ],
       connections: [{ id: 'c-1', environmentId: 'env-1', source: 'n-1', target: 'n-1' }],
       selectedEnvironmentId: 'env-1',
     });
@@ -89,7 +113,16 @@ describe('dashboard store', () => {
 
   it('deleteNode removes node and related connections', async () => {
     useDashboardStore.setState({
-      nodes: [{ id: 'n-1', environmentId: 'env-1', name: 'API', description: '', url: 'http://x.com', position: { x: 0, y: 0 } }],
+      nodes: [
+        {
+          id: 'n-1',
+          environmentId: 'env-1',
+          name: 'API',
+          description: '',
+          url: 'http://x.com',
+          position: { x: 0, y: 0 },
+        },
+      ],
       connections: [{ id: 'c-1', environmentId: 'env-1', source: 'n-1', target: 'n-2' }],
     });
 
@@ -101,7 +134,16 @@ describe('dashboard store', () => {
 
   it('checkNodeStatus sets status on success', async () => {
     useDashboardStore.setState({
-      nodes: [{ id: 'n-1', environmentId: 'env-1', name: 'API', description: '', url: 'http://x.com', position: { x: 0, y: 0 } }],
+      nodes: [
+        {
+          id: 'n-1',
+          environmentId: 'env-1',
+          name: 'API',
+          description: '',
+          url: 'http://x.com',
+          position: { x: 0, y: 0 },
+        },
+      ],
     });
 
     await useDashboardStore.getState().checkNodeStatus('n-1');

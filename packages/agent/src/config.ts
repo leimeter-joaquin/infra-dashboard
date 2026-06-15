@@ -7,6 +7,8 @@ const ActionSchema = z.object({
   description: z.string(),
   cmd: z.string().min(1),
   args: z.array(z.string()),
+  cwd: z.string().optional(),
+  detached: z.boolean().optional().default(false),
 });
 
 const AgentConfigSchema = z.object({

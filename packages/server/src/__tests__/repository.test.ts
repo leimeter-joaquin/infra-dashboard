@@ -31,7 +31,11 @@ describe('FileConfigRepository', () => {
 
   it('overwrites existing config on save', async () => {
     const repo = new FileConfigRepository(tmpFile);
-    await repo.saveConfig({ environments: [{ id: '1', name: 'a', createdAt: '' }], nodes: [], connections: [] });
+    await repo.saveConfig({
+      environments: [{ id: '1', name: 'a', createdAt: '' }],
+      nodes: [],
+      connections: [],
+    });
     await repo.saveConfig({ environments: [], nodes: [], connections: [] });
     const config = await repo.getConfig();
     expect(config.environments).toHaveLength(0);

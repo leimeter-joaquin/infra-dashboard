@@ -13,6 +13,7 @@ export function App() {
     nodes,
     connections,
     nodeStatuses,
+    agentActions,
     loadConfig,
     createConnection,
     deleteConnection,
@@ -21,6 +22,9 @@ export function App() {
     agentOnline,
     agentToken,
     setAgentToken,
+    refreshAgentActions,
+    runNode,
+    stopNode,
   } = useDashboardStore();
 
   useEffect(() => {
@@ -29,8 +33,11 @@ export function App() {
 
   // Health check polling — server-side fetch, no CORS issues.
   useEffect(() => {
-    const { checkNodeStatus, nodes: currentNodes, selectedEnvironmentId: envId } =
-      useDashboardStore.getState();
+    const {
+      checkNodeStatus,
+      nodes: currentNodes,
+      selectedEnvironmentId: envId,
+    } = useDashboardStore.getState();
     const poll = () => {
       const { nodes: ns, selectedEnvironmentId: eid } = useDashboardStore.getState();
       const targets = eid ? ns.filter((n) => n.environmentId === eid) : ns;
@@ -54,6 +61,13 @@ export function App() {
     return () => clearInterval(interval);
   }, [setAgentOnline]);
 
+  // Refresh the running state of agent actions (drives the Run/Stop buttons).
+  useEffect(() => {
+    refreshAgentActions();
+    const interval = setInterval(refreshAgentActions, 15_000);
+    return () => clearInterval(interval);
+  }, [refreshAgentActions, agentToken]);
+
   const visibleNodes = selectedEnvironmentId
     ? nodes.filter((n) => n.environmentId === selectedEnvironmentId)
     : [];
@@ -62,7 +76,14 @@ export function App() {
     : [];
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100vh', fontFamily: 'sans-serif' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        fontFamily: 'sans-serif',
+      }}
+    >
       <header
         style={{
           padding: '10px 20px',
@@ -84,7 +105,13 @@ export function App() {
             value={agentToken}
             onChange={(e) => setAgentToken(e.target.value)}
             placeholder="paste token..."
-            style={{ fontSize: 12, padding: '3px 6px', borderRadius: 4, border: '1px solid #d1d5db', width: 160 }}
+            style={{
+              fontSize: 12,
+              padding: '3px 6px',
+              borderRadius: 4,
+              border: '1px solid #d1d5db',
+              width: 160,
+            }}
           />
         </div>
       </header>
@@ -102,11 +129,20 @@ export function App() {
                   connections={visibleConnections}
                   statuses={nodeStatuses}
                   environmentId={selectedEnvironmentId}
-                  onConnectionCreate={(environmentId, source, target) =>
-                    createConnection({ environmentId, source, target })
+                  onConnectionCreate={(environmentId, source, target, sourceHandle, targetHandle) =>
+                    createConnection({
+                      environmentId,
+                      source,
+                      target,
+                      sourceHandle: sourceHandle ?? undefined,
+                      targetHandle: targetHandle ?? undefined,
+                    })
                   }
                   onConnectionDelete={deleteConnection}
                   onNodePositionChange={(id, position) => updateNode(id, { position })}
+                  agentActions={agentActions}
+                  onRun={runNode}
+                  onStop={stopNode}
                 />
               </div>
             </>

@@ -43,7 +43,7 @@ describe('POST /api/environments', () => {
       body: JSON.stringify({ name: 'local' }),
     });
     expect(res.status).toBe(201);
-    const env = await res.json() as { name: string; id: string; createdAt: string };
+    const env = (await res.json()) as { name: string; id: string; createdAt: string };
     expect(env.name).toBe('local');
     expect(env.id).toBeDefined();
     expect(env.createdAt).toBeDefined();
@@ -72,7 +72,16 @@ describe('DELETE /api/environments/:id', () => {
   it('removes environment and cascades to nodes and connections', async () => {
     const repo = makeMockRepo({
       environments: [{ id: 'env-1', name: 'test', createdAt: '' }],
-      nodes: [{ id: 'n-1', environmentId: 'env-1', name: 'API', description: '', url: 'http://localhost', position: { x: 0, y: 0 } }],
+      nodes: [
+        {
+          id: 'n-1',
+          environmentId: 'env-1',
+          name: 'API',
+          description: '',
+          url: 'http://localhost',
+          position: { x: 0, y: 0 },
+        },
+      ],
       connections: [{ id: 'c-1', environmentId: 'env-1', source: 'n-1', target: 'n-1' }],
     });
     const app = createApp(repo);
@@ -106,7 +115,7 @@ describe('PATCH /api/environments/:id', () => {
       body: JSON.stringify({ name: 'new' }),
     });
     expect(res.status).toBe(200);
-    const env = await res.json() as { name: string };
+    const env = (await res.json()) as { name: string };
     expect(env.name).toBe('new');
   });
 });

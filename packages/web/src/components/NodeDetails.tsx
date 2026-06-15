@@ -13,6 +13,8 @@ export function NodeDetails({ environmentId }: Props) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [url, setUrl] = useState('');
+  const [healthUrl, setHealthUrl] = useState('');
+  const [runActionId, setRunActionId] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -30,11 +32,15 @@ export function NodeDetails({ environmentId }: Props) {
         name: name.trim(),
         description: description.trim(),
         url: url.trim(),
+        healthUrl: healthUrl.trim() || undefined,
+        runActionId: runActionId.trim() || undefined,
         position: { x: Math.random() * 300, y: Math.random() * 200 },
       });
       setName('');
       setDescription('');
       setUrl('');
+      setHealthUrl('');
+      setRunActionId('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create node');
     } finally {
@@ -45,7 +51,10 @@ export function NodeDetails({ environmentId }: Props) {
   return (
     <div style={{ padding: '12px 16px', borderBottom: '1px solid #e5e7eb' }}>
       <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 8 }}>Add node</div>
-      <form onSubmit={handleCreate} style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'flex-end' }}>
+      <form
+        onSubmit={handleCreate}
+        style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'flex-end' }}
+      >
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -67,7 +76,25 @@ export function NodeDetails({ environmentId }: Props) {
           style={inputStyle}
           data-testid="node-desc-input"
         />
-        <button type="submit" disabled={saving} style={{ fontSize: 12, padding: '4px 10px', cursor: 'pointer' }}>
+        <input
+          value={healthUrl}
+          onChange={(e) => setHealthUrl(e.target.value)}
+          placeholder="Health URL (optional)"
+          style={{ ...inputStyle, minWidth: 180 }}
+          data-testid="node-health-url-input"
+        />
+        <input
+          value={runActionId}
+          onChange={(e) => setRunActionId(e.target.value)}
+          placeholder="Run action ID (optional)"
+          style={inputStyle}
+          data-testid="node-run-action-input"
+        />
+        <button
+          type="submit"
+          disabled={saving}
+          style={{ fontSize: 12, padding: '4px 10px', cursor: 'pointer' }}
+        >
           {saving ? 'Adding...' : 'Add node'}
         </button>
       </form>
@@ -76,12 +103,27 @@ export function NodeDetails({ environmentId }: Props) {
       {envNodes.length > 0 && (
         <div style={{ marginTop: 12 }}>
           {envNodes.map((n: NodeConfig) => (
-            <div key={n.id} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, padding: '3px 0' }}>
+            <div
+              key={n.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                fontSize: 12,
+                padding: '3px 0',
+              }}
+            >
               <span style={{ fontWeight: 500 }}>{n.name}</span>
               <span style={{ color: '#6b7280' }}>{n.url}</span>
               <button
                 onClick={() => deleteNode(n.id)}
-                style={{ fontSize: 11, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+                style={{
+                  fontSize: 11,
+                  color: '#ef4444',
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                }}
                 aria-label={`Delete node ${n.name}`}
               >
                 Remove
