@@ -10,6 +10,8 @@ export interface NodeConfig {
   name: string;
   description: string;
   url: string;
+  healthUrl?: string;
+  runActionId?: string;
   position: { x: number; y: number };
 }
 
@@ -18,6 +20,8 @@ export interface Connection {
   environmentId: string;
   source: string;
   target: string;
+  sourceHandle?: string;
+  targetHandle?: string;
 }
 
 export interface Config {
@@ -42,4 +46,11 @@ export interface AgentActionResult {
 export interface AgentActionInfo {
   id: string;
   description: string;
+  detached: boolean;
+  running: boolean;
+}
+
+export interface AgentStopResult {
+  ok: boolean;
+  message: string;
 }

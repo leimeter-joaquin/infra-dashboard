@@ -14,6 +14,21 @@
       "description": "Kill running wrangler process (restart manually after)",
       "cmd": "pkill",
       "args": ["-f", "wrangler"]
+    },
+    {
+      "id": "start-dev-server",
+      "description": "Start a dev server in the background",
+      "cmd": "npm",
+      "args": ["run", "dev"],
+      "cwd": "/path/to/your-project",
+      "detached": true
+    },
+    {
+      "id": "test-detached",
+      "description": "Test detached sleep action",
+      "cmd": "sleep",
+      "args": ["100"],
+      "detached": true
     }
   ]
 }

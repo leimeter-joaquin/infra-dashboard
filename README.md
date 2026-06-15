@@ -126,6 +126,26 @@ Edit `packages/agent/agent.config.json`:
 
 The dashboard can only trigger actions by `id` — the raw `cmd` and `args` are never sent to the client.
 
+### Detached (long-running) actions
+
+Set `"detached": true` and optionally `"cwd"` for actions that should keep running in the
+background (e.g. a dev server), such as:
+
+```json
+{
+  "id": "start-dev-server",
+  "description": "Start a dev server in the background",
+  "cmd": "npm",
+  "args": ["run", "dev"],
+  "cwd": "/path/to/your-project",
+  "detached": true
+}
+```
+
+`POST /actions/:id/run` returns immediately without waiting for the process to exit.
+`POST /actions/:id/stop` kills the whole process group started by that action. `GET /actions`
+reports `detached` and `running` per action so the dashboard can show Run/Stop accordingly.
+
 ## Future: moving the server to the cloud
 
 1. Deploy `/packages/server` to Cloudflare Workers (it's already Hono — swap `@hono/node-server` for the Workers adapter).

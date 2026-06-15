@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { useDashboardStore } from '../store/dashboard';
 
 export function EnvironmentSidebar() {
-  const { environments, selectedEnvironmentId, selectEnvironment, createEnvironment, deleteEnvironment } =
-    useDashboardStore();
+  const {
+    environments,
+    selectedEnvironmentId,
+    selectEnvironment,
+    createEnvironment,
+    deleteEnvironment,
+  } = useDashboardStore();
   const [newName, setNewName] = useState('');
   const [creating, setCreating] = useState(false);
 
@@ -55,7 +60,13 @@ export function EnvironmentSidebar() {
         >
           <span style={{ flex: 1 }}>{env.name}</span>
           <button
-            style={{ fontSize: 11, color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer' }}
+            style={{
+              fontSize: 11,
+              color: '#ef4444',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+            }}
             onClick={(e) => {
               e.stopPropagation();
               deleteEnvironment(env.id);
@@ -67,7 +78,10 @@ export function EnvironmentSidebar() {
         </div>
       ))}
 
-      <form onSubmit={handleCreate} style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}>
+      <form
+        onSubmit={handleCreate}
+        style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}
+      >
         <input
           type="text"
           value={newName}

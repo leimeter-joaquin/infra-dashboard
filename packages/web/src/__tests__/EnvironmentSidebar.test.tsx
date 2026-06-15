@@ -5,9 +5,11 @@ import { useDashboardStore } from '../store/dashboard';
 
 vi.mock('../api/server-client', () => ({
   serverClient: {
-    createEnvironment: vi.fn().mockImplementation((name: string) =>
-      Promise.resolve({ id: 'env-created', name, createdAt: new Date().toISOString() })
-    ),
+    createEnvironment: vi
+      .fn()
+      .mockImplementation((name: string) =>
+        Promise.resolve({ id: 'env-created', name, createdAt: new Date().toISOString() })
+      ),
     deleteEnvironment: vi.fn().mockResolvedValue({ ok: true }),
   },
 }));

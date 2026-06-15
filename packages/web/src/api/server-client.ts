@@ -50,8 +50,7 @@ export const serverClient = {
       body: JSON.stringify(data),
     }),
 
-  deleteNode: (id: string) =>
-    request<{ ok: boolean }>(`/nodes/${id}`, { method: 'DELETE' }),
+  deleteNode: (id: string) => request<{ ok: boolean }>(`/nodes/${id}`, { method: 'DELETE' }),
 
   createConnection: (data: Omit<Connection, 'id'>) =>
     request<Connection>('/connections', {

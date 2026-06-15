@@ -2,7 +2,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createApp } from '../app';
 import { makeMockRepo } from './test-helpers';
 
-interface HealthData { up: boolean; status: number | null; ms: number }
+interface HealthData {
+  up: boolean;
+  status: number | null;
+  ms: number;
+}
 
 describe('POST /api/health', () => {
   const app = createApp(makeMockRepo());
@@ -25,7 +29,7 @@ describe('POST /api/health', () => {
     });
 
     expect(res.status).toBe(200);
-    const data = await res.json() as HealthData;
+    const data = (await res.json()) as HealthData;
     expect(data.up).toBe(true);
     expect(data.status).toBe(200);
     expect(typeof data.ms).toBe('number');
@@ -40,7 +44,7 @@ describe('POST /api/health', () => {
       body: JSON.stringify({ url: 'http://example.com/missing' }),
     });
 
-    const data = await res.json() as HealthData;
+    const data = (await res.json()) as HealthData;
     expect(data.up).toBe(true);
     expect(data.status).toBe(404);
   });
@@ -54,7 +58,7 @@ describe('POST /api/health', () => {
       body: JSON.stringify({ url: 'http://example.com' }),
     });
 
-    const data = await res.json() as HealthData;
+    const data = (await res.json()) as HealthData;
     expect(data.up).toBe(false);
     expect(data.status).toBeNull();
   });
